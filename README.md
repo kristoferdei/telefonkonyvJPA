@@ -1,0 +1,1 @@
+Telefonkönyv alkalmazás kontaktok tárolásához
