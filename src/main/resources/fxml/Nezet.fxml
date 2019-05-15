@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="anchor" fx:id="anchor" prefHeight="680.0" prefWidth="605.0" style="-fx-background-color: #34495e;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="telefonkonyv.NezetController">
+    <children>
+        <Label layoutX="222.0" layoutY="-1.0" minHeight="16" minWidth="69" text="Telefonkönyv" textFill="WHITE">
+         <font>
+            <Font name="Arial Bold" size="25.0" />
+         </font></Label>
+      <SplitPane id="mainSplit" fx:id="mainSplit" dividerPositions="0.2491638795986622" layoutY="31.0" prefHeight="620.0" prefWidth="600.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <StackPane id="menuPane" fx:id="menuPane" layoutX="-27.0" layoutY="138.0" prefHeight="618.0" prefWidth="146.0" style="-fx-background-color: #bdc3c7;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <Pane id="newPane" fx:id="newPane" layoutX="143.0" layoutY="229.0" prefHeight="618.0" prefWidth="446.0" style="-fx-background-color: #ecf0f1;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label layoutX="116.0" layoutY="80.0" text="Új kontakt hozzáadása" textFill="#34495e">
+                           <font>
+                              <Font name="Arial Bold" size="20.0" />
+                           </font></Label>
+                        <Label alignment="CENTER_RIGHT" layoutX="61.0" layoutY="201.0" prefHeight="17.0" prefWidth="96.0" text="Vezetéknév:" textFill="#34495e">
+                           <font>
+                              <Font name="Arial" size="15.0" />
+                           </font></Label>
+                        <Label alignment="CENTER_RIGHT" layoutX="61.0" layoutY="238.0" prefHeight="17.0" prefWidth="96.0" text="Keresztnév:" textFill="#34495e">
+                           <font>
+                              <Font name="Arial" size="15.0" />
+                           </font></Label>
+                        <Label alignment="CENTER_RIGHT" layoutX="61.0" layoutY="276.0" prefHeight="17.0" prefWidth="96.0" text="Telefonszám:" textFill="#34495e">
+                           <font>
+                              <Font name="Arial" size="15.0" />
+                           </font></Label>
+                        <JFXButton id="addNewContactButton" fx:id="addNewContactButton" layoutX="180.0" layoutY="350.0" onAction="#addContact" prefHeight="36.0" prefWidth="86.0" style="-fx-background-color: #34495e; -fx-background-radius: 5em;" text="Hozzáad" textFill="WHITE">
+                           <font>
+                              <Font name="Arial" size="15.0" />
+                           </font></JFXButton>
+                        <JFXTextField id="inputFirstname" fx:id="inputFirstName" layoutX="182.0" layoutY="226.0" prefHeight="25.0" prefWidth="149.0" />
+                        <JFXTextField id="inputPhonenumber" fx:id="inputPhoneNumber" layoutX="182.0" layoutY="264.0" prefHeight="25.0" prefWidth="149.0" />
+                        <JFXTextField id="inputLastname" fx:id="inputLastName" layoutX="182.0" layoutY="189.0" prefHeight="25.0" prefWidth="149.0" />
+                     </children>
+                  </Pane>
+                  <Pane id="savePane" fx:id="savePane" layoutX="133.0" layoutY="219.0" prefHeight="618.0" prefWidth="446.0" style="-fx-background-color: #ecf0f1;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="BOTTOM" layoutX="131.0" layoutY="99.0" prefHeight="47.0" prefWidth="182.0" text="PDF mentése" textFill="#34495e">
+                           <font>
+                              <Font name="Arial Bold" size="20.0" />
+                           </font></Label>
+                        <Label layoutX="189.0" layoutY="192.0" text="Fájl neve:" textFill="#34495e">
+                           <font>
+                              <Font name="Arial" size="15.0" />
+                           </font></Label>
+                        <JFXTextField id="inputExportName" fx:id="inputSaveName" layoutX="137.0" layoutY="248.0" prefHeight="25.0" prefWidth="172.0" />
+                        <JFXButton id="exportButton" fx:id="saveButton" layoutX="186.0" layoutY="309.0" onAction="#saveList" prefHeight="36.0" prefWidth="75.0" style="-fx-background-color: #34495e; -fx-background-radius: 5em;" text="Mentés" textFill="WHITE">
+                           <font>
+                              <Font name="Arial" size="15.0" />
+                           </font>
+                        </JFXButton>
+                     </children></Pane>
+                  <Pane id="contactPane" fx:id="contactPane" layoutX="123.0" layoutY="209.0" prefHeight="618.0" prefWidth="446.0" style="-fx-background-color: #ecf0f1;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <TableView id="table" fx:id="table" editable="true" prefHeight="620.0" prefWidth="446.0" style="-fx-background-color: #ecf0f1;">
+                          <placeholder>
+                              <Label text="Üres" textFill="#34495e">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font></Label>
+                          </placeholder>
+                          <columns>
+                          </columns>
+                        </TableView>
+                     </children>
+                  </Pane>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+      <Pane id="alertPane" fx:id="alertPane" prefHeight="686.0" prefWidth="611.0" visible="false" AnchorPane.bottomAnchor="-6.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-6.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label layoutX="231.0" layoutY="280.0" text="Adj meg fájlnevet!">
+               <font>
+                  <Font name="Arial Bold" size="20.0" />
+               </font></Label>
+            <JFXButton id="alertButtton" fx:id="alertButton" layoutX="297.0" layoutY="330.0" onAction="#handleAlertButton" style="-fx-background-color: #34495e; -fx-background-radius: 5em;" text="OK" textFill="WHITE">
+               <font>
+                  <Font name="Arial" size="15.0" />
+               </font>
+            </JFXButton>
+         </children>
+      </Pane>
+    </children>
+</AnchorPane>
