@@ -1,20 +1,19 @@
 package telefonkonyv;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -27,51 +26,43 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.util.Callback;
 import lombok.extern.slf4j.Slf4j;
+import main.TelefonKonyv;
+import javax.persistence.EntityManager;
 
 @Slf4j
 public class NezetController implements Initializable {
 
-    @FXML
-    AnchorPane anchor;
+    EntityManager em;
 
-    @FXML
-    SplitPane mainSplit;
+    @FXML AnchorPane anchor;
 
-    @FXML
-    StackPane menuPane;
+    @FXML SplitPane mainSplit;
+
+    @FXML StackPane menuPane;
     
-    @FXML
-    Pane contactPane;
-    @FXML
-    Pane newPane;
-    @FXML
-    Pane savePane;
-    @FXML
-    Pane alertPane;
+    @FXML Pane contactPane;
+    @FXML Pane newPane;
+    @FXML Pane savePane;
+    @FXML Pane alertPane;
 
-    @FXML
-    TableView table;
+    @FXML TableView<Person> myTable;
 
-    @FXML
-    Button addNewContactButton;
-    @FXML
-    Button saveButton;
-    @FXML
-    Button alertButton;
+    @FXML TableColumn<Person, String> colFirstName;
+    @FXML TableColumn<Person, String> colLastName;
+    @FXML TableColumn<Person, String> colPhoneNumber;
 
-    @FXML
-    TextField inputLastName;
-    @FXML
-    TextField inputFirstName;
-    @FXML
-    TextField inputPhoneNumber;
-    @FXML
-    TextField inputSaveName;
+    @FXML Button addNewContactButton;
+    @FXML Button saveButton;
+    @FXML Button alertButton;
+    @FXML Button deleteButton;
 
-    @FXML
-    Label alertText;
+    @FXML TextField inputLastName;
+    @FXML TextField inputFirstName;
+    @FXML TextField inputPhoneNumber;
+    @FXML TextField inputSaveName;
+
+    @FXML Label alertText;
     
     private final String MENU_CONTACTS = "Kontaktok";
     private final String MENU_LIST = "Lista";
@@ -79,34 +70,7 @@ public class NezetController implements Initializable {
     private final String MENU_SAVE = "Mentés";
     private final String MENU_QUIT = "Kilépés";
 
-    @Deprecated
-    DB db = new DB();
-
     private final ObservableList<Person> data = FXCollections.observableArrayList();
-
-    @FXML
-    private void addContact(ActionEvent event) {
-        String lastname = inputLastName.getText();
-        String firstname = inputFirstName.getText();
-        String phonenumber = inputPhoneNumber.getText();
-        lastname = lastname.replaceAll("\\s+", "");
-        firstname = firstname.replaceAll("\\s+", "");
-        phonenumber = phonenumber.replaceAll("\\s+", "");
-        if (lastname != null && !lastname.equals("") || firstname != null && !firstname.equals("") || phonenumber != null && !phonenumber.equals("")) {
-            Person newPerson = new Person(inputLastName.getText(), inputFirstName.getText(), inputPhoneNumber.getText());
-            data.add(newPerson);
-            db.addContact(newPerson);
-        } else {
-            menuPane.setOpacity(0.1);
-            newPane.setOpacity(0.1);
-            alertPane.setVisible(true);
-            log.info("Nem lettek megadva az adatok");
-            alertText.setText("Add meg az adatokat!");
-        }
-        inputLastName.clear();
-        inputFirstName.clear();
-        inputPhoneNumber.clear();
-    }
 
     @FXML
     private void handleAlertButton(ActionEvent event) {
@@ -131,98 +95,32 @@ public class NezetController implements Initializable {
         }
         inputSaveName.clear();
     }
-    
-    public void setTable() {
-        TableColumn lastNameCol = new TableColumn("Vezetéknév");
-        lastNameCol.setMinWidth(120);
-        lastNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        lastNameCol.setCellValueFactory(new PropertyValueFactory<Person, String>("lastName"));
-        
-        lastNameCol.setOnEditCommit(
-            new EventHandler<TableColumn.CellEditEvent<Person, String>>() {
-                @Override
-                public void handle(TableColumn.CellEditEvent<Person, String> t) {
-                    Person actualPerson = (Person) t.getTableView().getItems().get(t.getTablePosition().getRow());
-                    actualPerson.setLastName(t.getNewValue());
-                    db.updateContact(actualPerson);
-                }
-            }
-        );
-        
-        TableColumn firstNameCol = new TableColumn("Keresztnév");
-        firstNameCol.setMinWidth(120);
-        firstNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        firstNameCol.setCellValueFactory(new PropertyValueFactory<Person, String>("firstName"));
-        
-        firstNameCol.setOnEditCommit(
-            new EventHandler<TableColumn.CellEditEvent<Person, String>>() {
-                @Override
-                public void handle(TableColumn.CellEditEvent<Person, String> t) {
-                    Person actualPerson = (Person) t.getTableView().getItems().get(t.getTablePosition().getRow());
-                    actualPerson.setFirstName(t.getNewValue());
-                    db.updateContact(actualPerson);
-                }
-            }
-        );
-        
-        TableColumn phoneNumberCol = new TableColumn("Telefonszám");
-        phoneNumberCol.setMinWidth(130);
-        phoneNumberCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        phoneNumberCol.setCellValueFactory(new PropertyValueFactory<Person, String>("phoneNumber"));
-        
-        phoneNumberCol.setOnEditCommit(
-            new EventHandler<TableColumn.CellEditEvent<Person, String>>() {
-                @Override
-                public void handle(TableColumn.CellEditEvent<Person, String> t) {
-                    Person actualPerson = (Person) t.getTableView().getItems().get(t.getTablePosition().getRow());
-                    actualPerson.setPhoneNumber(t.getNewValue());
-                    db.updateContact(actualPerson);
-                }
-            }
-        );
-        
-        TableColumn removeCol = new TableColumn("Törlés");
-        phoneNumberCol.setMinWidth(100);
 
-        Callback<TableColumn<Person, String>, TableCell<Person, String>> cellFactory = 
-                new Callback<TableColumn<Person, String>, TableCell<Person, String>>()
-                {
-                    @Override
-                    public TableCell call(final TableColumn<Person, String> param)
-                    {
-                        final TableCell<Person, String> cell = new TableCell<Person, String>()
-                        {   
-                            final Button btn = new Button("Töröl");
+    private  void  setTable() {
+        colFirstName.setCellValueFactory(new PropertyValueFactory<Person, String>("FirstName"));
+        colLastName.setCellValueFactory(new PropertyValueFactory<Person, String>("LastName"));
+        colPhoneNumber.setCellValueFactory(new PropertyValueFactory<Person, String>("PhoneNumber"));
 
-                            @Override
-                            public void updateItem(String item, boolean empty)
-                            {
-                                super.updateItem(item, empty);
-                                if (empty)
-                                {
-                                    setGraphic(null);
-                                    setText(null);
-                                }
-                                else
-                                {
-                                    btn.setOnAction((ActionEvent event) ->
-                                            {
-                                                Person person = getTableView().getItems().get(getIndex());
-                                                data.remove(person);
-                                                db.removeContact(person);
-                                       } );
-                                    setGraphic(btn);
-                                    setText(null);
-                                }
-                            }
-                        };
-                        return cell;
-                    }
-                };
-        removeCol.setCellFactory(cellFactory);
-        table.getColumns().addAll(lastNameCol, firstNameCol, phoneNumberCol, removeCol);
-        data.addAll(db.getAllContacts());
-        table.setItems(data);
+        myTable.setEditable(true);
+        colFirstName.setCellFactory(TextFieldTableCell.forTableColumn());
+        colLastName.setCellFactory(TextFieldTableCell.forTableColumn());
+        colPhoneNumber.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        myTable.getItems().addAll();
+    }
+
+    public void onEdit(TableColumn.CellEditEvent<Person, String> personStringCellEditEvent) {
+        Person person = myTable.getSelectionModel().getSelectedItem();
+        person.setFirstName(personStringCellEditEvent.getNewValue());
+        person.setLastName(personStringCellEditEvent.getNewValue());
+        person.setPhoneNumber(personStringCellEditEvent.getNewValue());
+    }
+
+    public void buttonRemove(ActionEvent actionEvent) {
+        ObservableList<Person> allPerson, singlePerson;
+        allPerson = myTable.getItems();
+        singlePerson = myTable.getSelectionModel().getSelectedItems();
+        singlePerson.forEach(allPerson::remove);
     }
 
     private void setMenu() {
@@ -261,6 +159,7 @@ public class NezetController implements Initializable {
                             contactPane.setVisible(true);
                             newPane.setVisible(false);
                             savePane.setVisible(false);
+                            deleteButton.setVisible(true);
                             break;
                         case MENU_NEW:
                             contactPane.setVisible(false);
@@ -281,9 +180,43 @@ public class NezetController implements Initializable {
         });
 }
 
+    @FXML public void addContact(ActionEvent event) {
+        String firstName = inputFirstName.getText();
+        String lastName = inputLastName.getText();
+        String phoneNumber = inputPhoneNumber.getText();
+        lastName = lastName.replaceAll("\\s+", "");
+        firstName = firstName.replaceAll("\\s+", "");
+        phoneNumber = phoneNumber.replaceAll("\\s+", "");
+        if (lastName != null && !lastName.equals("") || firstName != null && !firstName.equals("") || phoneNumber != null && !phoneNumber.equals("")) {
+          Person newPerson = new Person(firstName, lastName, phoneNumber);
+          data.add(newPerson);
+          myTable.getItems().add(newPerson);
+          em = TelefonKonyv.emf.createEntityManager();
+          em.getTransaction().begin();
+          em.persist(newPerson);
+          em.getTransaction().commit();
+          em.close();
+        } else {
+            newPane.setOpacity(0.1);
+            alertPane.setVisible(true);
+            log.info("Nem lettek megadva az adatok");
+            alertText.setText("Add meg az adatokat!");
+        }
+        inputLastName.clear();
+        inputFirstName.clear();
+        inputPhoneNumber.clear();
+    }
+
+    public void getContacts() {
+        em = TelefonKonyv.emf.createEntityManager();
+        List<Person> listEmployee = em.createQuery("FROM Person").getResultList();
+        myTable.getItems().addAll(listEmployee);
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        setTable();
         setMenu();
+        setTable();
+        getContacts();
     }
 }

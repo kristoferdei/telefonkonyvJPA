@@ -9,14 +9,14 @@ public class PersonTest {
     @Test
     public void lNameTest() throws Exception {
         Person testPerson = new Person("Minta" ,"Pelda" ,"06301234567");
-        assertEquals("Minta", testPerson.getLastName());
+        assertEquals("Pelda", testPerson.getLastName());
         assertNotEquals("Proba", testPerson.getLastName());
     }
 
     @Test
     public void fNameTest() throws Exception {
         Person testPerson = new Person("Minta" ,"Pelda" ,"06301234567");
-        assertEquals("Pelda", testPerson.getFirstName());
+        assertEquals("Minta", testPerson.getFirstName());
         assertNotEquals("Proba", testPerson.getFirstName());
     }
 

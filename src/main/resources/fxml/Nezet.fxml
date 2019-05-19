@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.text.*?>
 <?import com.jfoenix.controls.*?>
 <?import javafx.scene.control.*?>
@@ -64,17 +65,25 @@
                            </font>
                         </JFXButton>
                      </children></Pane>
-                  <Pane id="contactPane" fx:id="contactPane" layoutX="123.0" layoutY="209.0" prefHeight="618.0" prefWidth="446.0" style="-fx-background-color: #ecf0f1;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <Pane id="contactPane" fx:id="contactPane" layoutX="123.0" layoutY="209.0" prefHeight="618.0" prefWidth="445.0" style="-fx-background-color: #ecf0f1;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <TableView id="table" fx:id="table" editable="true" prefHeight="620.0" prefWidth="446.0" style="-fx-background-color: #ecf0f1;">
+                        <TableView id="table" fx:id="myTable" editable="true" prefHeight="618.0" prefWidth="446.0" style="-fx-background-color: #ecf0f1;">
                           <placeholder>
-                              <Label text="Üres" textFill="#34495e">
+                              <Label textFill="#34495e">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font></Label>
                           </placeholder>
-                          <columns>
-                          </columns>
+                           <columns>
+                              <TableColumn id="colLastName" fx:id="colLastName" onEditCommit="#onEdit" prefWidth="129.0" text="Vezetéknév" />
+                              <TableColumn id="colFirstName" fx:id="colFirstName" onEditCommit="#onEdit" prefWidth="130.0" text="Kersztnév" />
+                              <TableColumn id="colPhoneNumber" fx:id="colPhoneNumber" onEditCommit="#onEdit" prefWidth="122.0" text="Telefonszám" />
+                              <TableColumn prefWidth="64.0">
+                                 <graphic>
+                                    <Button id="deleteButton" fx:id="deleteButton" mnemonicParsing="false" onAction="#buttonRemove" text="Törlés" />
+                                 </graphic>
+                              </TableColumn>
+                           </columns>
                         </TableView>
                      </children>
                   </Pane>
